@@ -1,10 +1,25 @@
 {
+  "name": "movieramademo",
+  "version": "0.1.0",
+  "description": "Hello Workable",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sta8hs/movierama.git"
+  },
+  "author": "Stathis Kokmotos <stathiskokm@yahoo.gr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sta8hs/movierama/issues"
+  },
+  "homepage": "https://github.com/sta8hs/movierama#readme",
   "dependencies": {
     "mongodb": "^4.8.1",
     "next": "latest",
@@ -12,8 +27,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "18.7.5",
-    "@types/react": "16.9.17",
-    "typescript": "4.6.3"
+    "@types/react": "18.0.27",
+    "eslint": "8.17.0",
+    "eslint-config-next": "12.1.6",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2"
   }
 }
