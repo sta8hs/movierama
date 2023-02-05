@@ -1,6 +1,10 @@
-import { ValidateProps } from '@/lib/api/constants';
 import { findPostById } from '@/lib/api/db';
-import { findComments, insertComment } from '@/lib/api/db/comment';
+import {
+  getLikes,
+  insertLike,
+  findLikeById,
+  deleteLikeById,
+} from '@/lib/api/db/likes';
 import { auths, validateBody } from '@/lib/api/middlewares';
 import { getMongoDb } from '@/lib/api/mongodb';
 import { ncOpts } from '@/lib/api/nc';
@@ -17,24 +21,19 @@ handler.get(async (req, res) => {
     return res.status(404).json({ error: { message: 'Post is not found.' } });
   }
 
-  const comments = await findComments(
+  const likes = await getLikes(
     db,
     req.query.postId,
-    req.query.before ? new Date(req.query.before) : undefined,
     req.query.limit ? parseInt(req.query.limit, 10) : undefined
   );
 
-  return res.json({ comments });
+  return res.json({ likes });
 });
 
 handler.post(
   ...auths,
   validateBody({
     type: 'object',
-    properties: {
-      content: ValidateProps.comment.content,
-    },
-    required: ['content'],
     additionalProperties: false,
   }),
   async (req, res) => {
@@ -44,20 +43,27 @@ handler.post(
 
     const db = await getMongoDb();
 
-    const content = req.body.content;
-
     const post = await findPostById(db, req.query.postId);
 
     if (!post) {
       return res.status(404).json({ error: { message: 'Post is not found.' } });
     }
 
-    const comment = await insertComment(db, post._id, {
+    const old_like = await findLikeById(db, req.query.postId, req.user._id);
+
+    if (old_like) {
+      const deleted = await deleteLikeById(db, req.query.postId, req.user._id);
+      console.log('Deleted', deleted);
+      return res
+        .status(201)
+        .json({ error: { message: 'Post already liked.' } });
+    }
+
+    const like = await insertLike(db, post._id, {
       creatorId: req.user._id,
-      content,
     });
 
-    return res.json({ comment });
+    return res.json({ like });
   }
 );
 

@@ -4,10 +4,10 @@ import { format } from '@lukeed/ms';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import Liker from '@/page-components/UserPost/Liker';
 import styles from './Post.module.css';
 
 const Post = ({ post, className }) => {
-  console.log(post)
   const timestampTxt = useMemo(() => {
     const diff = Date.now() - new Date(post.createdAt).getTime();
     if (diff < 1 * 60 * 1000) return 'Just now';
@@ -36,11 +36,14 @@ const Post = ({ post, className }) => {
       <div className={styles.wrap}>
         <p className={styles.content}>{post.content}</p>
       </div>
-      <div className={styles.wrap}>
-        <time dateTime={String(post.createdAt)} className={styles.timestamp}>
-          {timestampTxt}
-        </time>
-      </div>
+      <Container column>
+        <div className={styles.wrap}>
+          <time dateTime={String(post.createdAt)} className={styles.timestamp}>
+            {timestampTxt}
+          </time>
+        </div>
+        <Liker post={post} />
+      </Container>
     </div>
   );
 };
