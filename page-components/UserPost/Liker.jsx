@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { ActionIcon } from '@mantine/core';
 import { Heart } from 'tabler-icons-react';
 import styles from './Commenter.module.css';
 
@@ -67,14 +66,14 @@ const LikerInner = ({ user, post }) => {
   }, [post, user]);
 
   return (
-    <ActionIcon onClick={onSubmit} size="lg" loading={updatingLike}>
+    <button onClick={onSubmit} size="lg" loading={updatingLike}>
       <Heart
         size={18}
         color={'red'}
         className={likesState == true ? styles.liked : null}
       />
       {likesState}
-    </ActionIcon>
+    </button>
   );
 };
 
